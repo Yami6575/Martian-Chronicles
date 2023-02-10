@@ -302,14 +302,6 @@ class Ui_MainWindow(QWidget):
             self.label_4.setPixmap(QtGui.QPixmap(f'ph{self.index}'))
 
 
-
-            '''pixmap=f'ph{self.index}'
-            pixmap=QtGui.QPixmap("ph")
-
-            pixmap=pixmap.scaled(self.label_6.width(),self.label_6.height())
-            
-            self.label_6.setPixmap(QtGui.QPixmap(pixmap))
-            self.label_6.resize(self.width(),self.height())'''
             
 
     def backword(self):
