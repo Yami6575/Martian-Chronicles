@@ -10,12 +10,12 @@ from email.mime.text import MIMEText
 from email.utils import COMMASPACE, formatdate
 from email import encoders
 import smtplib, ssl
-
+import threading
 
 class Ui_MainWindow(QWidget):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(998, 768)
+        MainWindow.resize(1000, 768)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -68,7 +68,7 @@ class Ui_MainWindow(QWidget):
         self.pushButton_3 = QtWidgets.QPushButton(self.frame_8)
         self.pushButton_3.setMinimumSize(QtCore.QSize(0, 191))
         self.pushButton_3.setObjectName("pushButton_3")
-        self.pushButton_3.clicked.connect(self.fetching)
+        self.pushButton_3.clicked.connect(self.imgf)
         self.horizontalLayout_4.addWidget(self.pushButton_3)
         self.frame_15 = QtWidgets.QFrame(self.frame_8)
         self.frame_15.setMinimumSize(QtCore.QSize(100, 0))
@@ -130,6 +130,7 @@ class Ui_MainWindow(QWidget):
         self.gridLayout_3 = QtWidgets.QGridLayout(self.frame_5)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.calendarWidget = QtWidgets.QCalendarWidget(self.frame_5)
+        
         self.calendarWidget.setObjectName("calendarWidget")
         self.gridLayout_3.addWidget(self.calendarWidget, 0, 0, 1, 1)
         self.horizontalLayout_2.addWidget(self.frame_5)
@@ -218,7 +219,7 @@ class Ui_MainWindow(QWidget):
         self.pushButton_5.setMinimumSize(QtCore.QSize(0, 60))
         self.pushButton_5.setText("Send Mail")
         self.pushButton_5.setObjectName("pushButton_5")
-        self.pushButton_5.clicked.connect(self.send_email)
+        self.pushButton_5.clicked.connect(self.smail)
         self.horizontalLayout_5.addWidget(self.pushButton_5)
         self.verticalLayout_3.addWidget(self.frame_10, 0, QtCore.Qt.AlignBottom)
         self.stackedWidget.addWidget(self.page_2)
@@ -283,6 +284,14 @@ class Ui_MainWindow(QWidget):
             self.count += 1 
             urllib.request.urlretrieve(f"{i['img_src']}",f"ph{self.count}.jpg")
             print("fetching data",self.count)
+
+    def imgf(self):
+        thread2 = threading.Thread(target=self.fetching)
+        thread2.start()
+        
+    def smail(self):
+        thread1= threading.Thread(target=self.send_email)
+        thread1.start()
         
     def loadimages(self):
         self.label_4.setPixmap(QtGui.QPixmap(f"ph{self.index}"))
@@ -316,6 +325,8 @@ class Ui_MainWindow(QWidget):
             #self.label_6.setPixmap(QtGui.QPixmap(f'ph{self.index}'))
 
     def send_email(self):
+        self.subject=self.lineEdit_3.text()
+
 
       
         self.sendto=self.lineEdit_2.text()
